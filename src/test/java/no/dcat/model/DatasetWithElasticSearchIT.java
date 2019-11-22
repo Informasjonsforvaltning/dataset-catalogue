@@ -2,7 +2,7 @@ package no.dcat.model;
 
 import no.dcat.datastore.ElasticDockerRule;
 import no.dcat.repository.DatasetRepository;
-import no.fdk.test.testcategories.IntegrationTest;
+import no.dcat.testcategories.IntegrationTest;
 import org.junit.ClassRule;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;

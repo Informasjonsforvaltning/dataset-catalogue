@@ -9,7 +9,7 @@ import no.dcat.model.Catalog;
 import no.dcat.model.Dataset;
 import no.dcat.repository.DatasetRepository;
 import no.dcat.service.CatalogRepository;
-import no.fdk.test.testcategories.IntegrationTest;
+import no.dcat.testcategories.IntegrationTest;
 import org.hamcrest.Matchers;
 import org.junit.Assert;
 import org.junit.Before;

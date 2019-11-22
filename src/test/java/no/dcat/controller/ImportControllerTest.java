@@ -4,7 +4,7 @@ package no.dcat.controller;
 import no.dcat.datastore.domain.dcat.builders.DcatReader;
 import no.dcat.model.Dataset;
 import no.dcat.shared.SkosCode;
-import no.fdk.test.testcategories.UnitTest;
+import no.dcat.testcategories.UnitTest;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.util.FileManager;
 import org.junit.Before;

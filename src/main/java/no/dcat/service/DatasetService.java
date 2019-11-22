@@ -2,7 +2,7 @@ package no.dcat.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
-import no.ccat.common.model.Concept;
+import no.dcat.common.model.Concept;
 import no.dcat.factory.DatasetFactory;
 import no.dcat.model.Catalog;
 import no.dcat.model.Dataset;

@@ -9,7 +9,7 @@ import no.dcat.model.Dataset;
 import no.dcat.repository.DatasetRepository;
 import no.dcat.service.CatalogRepository;
 import no.dcat.service.DatasetService;
-import no.fdk.test.testcategories.UnitTest;
+import no.dcat.testcategories.UnitTest;
 import no.dcat.webutils.exceptions.FDKException;
 import org.junit.Before;
 import org.junit.Test;
