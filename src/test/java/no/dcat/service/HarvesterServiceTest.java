@@ -3,7 +3,7 @@ package no.dcat.service;
 import com.github.tomakehurst.wiremock.junit.WireMockRule;
 import no.dcat.model.Catalog;
 import no.dcat.shared.admin.DcatSourceDto;
-import no.fdk.test.testcategories.UnitTest;
+import no.dcat.testcategories.UnitTest;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;

@@ -1,6 +1,6 @@
 package no.dcat.configuration;
 
-import no.ccat.common.model.Concept;
+import no.dcat.common.model.Concept;
 import no.dcat.model.Catalog;
 import no.dcat.model.Dataset;
 import org.springframework.context.annotation.Bean;

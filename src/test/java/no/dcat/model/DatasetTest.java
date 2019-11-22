@@ -1,6 +1,6 @@
 package no.dcat.model;
 
-import no.fdk.test.testcategories.UnitTest;
+import no.dcat.testcategories.UnitTest;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 
@@ -26,7 +26,7 @@ public class DatasetTest {
         Map languangeDescription = new HashMap();
         languangeDescription.put("no", "test");
         dataset.setDescription(languangeDescription);
-        assertThat(dataset.toString(), is("Dataset(1, null, null, null, null, {no=test}, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, DRAFT)"));
+        assertThat(dataset.toString(), is("Dataset(1, null, null, null, null, {no=test}, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null)"));
     }
 
 }
