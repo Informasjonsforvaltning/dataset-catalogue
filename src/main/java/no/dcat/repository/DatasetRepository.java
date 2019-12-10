@@ -15,6 +15,6 @@ public interface DatasetRepository extends ElasticsearchRepository<Dataset, Stri
 
     Page<Dataset> findByCatalogId(String catalogId, Pageable pageable);
 
-    Page<Dataset> findByCatalogIdAndRegistrationStatus(String catalogId, String status, Pageable pageable);
+    Page<Dataset> findByCatalogIdAndRegistrationStatus(String catalogId, Dataset.REGISTRATION_STATUS status, Pageable pageable);
 
 }

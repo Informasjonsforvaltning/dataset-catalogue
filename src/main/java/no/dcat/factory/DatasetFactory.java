@@ -23,7 +23,7 @@ public class DatasetFactory {
         createdDataset.set_lastModified(new Date());
 
         if (createdDataset.getRegistrationStatus() == null) {
-            createdDataset.setRegistrationStatus(Dataset.REGISTRATION_STATUS_DRAFT);
+            createdDataset.setRegistrationStatus(Dataset.REGISTRATION_STATUS.DRAFT);
         }
 
         if (createdDataset.getPublisher() == null) {
