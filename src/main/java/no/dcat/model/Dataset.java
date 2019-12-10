@@ -21,9 +21,6 @@ public class Dataset extends no.dcat.shared.Dataset {
 
     public static final String ELASTIC_TYPE = "dataset";
 
-    public static final String REGISTRATION_STATUS_DRAFT = "DRAFT";
-    public static final String REGISTRATION_STATUS_PUBLISH = "PUBLISH";
-
     @Field(type = FieldType.Keyword, store = true)
     private String catalogId;
 
@@ -32,7 +29,7 @@ public class Dataset extends no.dcat.shared.Dataset {
     private Date _lastModified;
 
     @Field
-    private String registrationStatus;
+    private REGISTRATION_STATUS registrationStatus;
 
     public Dataset() {
         super();
@@ -47,5 +44,11 @@ public class Dataset extends no.dcat.shared.Dataset {
         String first = super.toString() ;
 
         return first.substring(0, first.length()-1) +", " + catalogId + ", " + _lastModified + ", " + registrationStatus + ")";
+    }
+
+    public static enum REGISTRATION_STATUS {
+        DRAFT,
+        APPROVE,
+        PUBLISH
     }
 }

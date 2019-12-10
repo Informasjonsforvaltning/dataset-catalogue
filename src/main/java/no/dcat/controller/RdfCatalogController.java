@@ -58,7 +58,7 @@ public class RdfCatalogController {
 
         // TODO fix limitation in more than 1000 datasets
         Page<Dataset> datasets = datasetRepository
-                .findByCatalogIdAndRegistrationStatus(catalog.getId(), Dataset.REGISTRATION_STATUS_PUBLISH, new PageRequest(0,1000));
+                .findByCatalogIdAndRegistrationStatus(catalog.getId(), Dataset.REGISTRATION_STATUS.PUBLISH, new PageRequest(0,1000));
 
         if (datasets != null) {
             List<no.dcat.shared.Dataset> theList = new ArrayList<>();

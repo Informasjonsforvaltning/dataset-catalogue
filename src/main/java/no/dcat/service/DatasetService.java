@@ -161,7 +161,7 @@ public class DatasetService {
 
     private boolean isDatasetPublished(Dataset dataset) {
         logger.info("Checking whether dataset with ID {} in catalog with ID {} should be harvested", dataset.getId(), dataset.getCatalogId());
-        return dataset.getRegistrationStatus().equalsIgnoreCase("PUBLISH");
+        return dataset.getRegistrationStatus() == Dataset.REGISTRATION_STATUS.PUBLISH;
     }
 
     private void triggerHarvest(Dataset dataset) {
