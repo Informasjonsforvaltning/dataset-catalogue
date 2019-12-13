@@ -15,7 +15,7 @@ jobs:
       - name: Package with Maven
         run: mvn clean package -B -T 2C
       - name: Build Docker image
-        run: docker build . --build-arg JAR_FILE=dataset-catalogue-1.0.0-SNAPSHOT.jar -t eu.gcr.io/fdk-infra/dataset-catalogue:latest -t eu.gcr.io/fdk-infra/dataset-catalogue:demo_latest -t eu.gcr.io/fdk-infra/dataset-catalogue:$GITHUB_SHA
+        run: docker build . -t eu.gcr.io/fdk-infra/dataset-catalogue:latest -t eu.gcr.io/fdk-infra/dataset-catalogue:demo_latest -t eu.gcr.io/fdk-infra/dataset-catalogue:$GITHUB_SHA
       - name: Connect to Google Cloud
         uses: actions-hub/gcloud@master
         env:
