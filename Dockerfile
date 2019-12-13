@@ -8,7 +8,7 @@ COPY conf/ conf/
 RUN chmod 755 -R conf/
 
 VOLUME /tmp
-ARG JAR_FILE
-ADD target/${JAR_FILE} app.jar
+ADD target/dataset-catalogue.jar app.jar
+
 RUN sh -c 'touch /app.jar'
 CMD java  -jar $JAVA_OPTS app.jar
