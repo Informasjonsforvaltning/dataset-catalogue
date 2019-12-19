@@ -17,11 +17,6 @@
         <relativePath/>
     </parent>
 
-    <organization>
-        <name>Brønnøysundregistrene</name>
-        <url>https://www.brreg.no</url>
-    </organization>
-
     <properties>
         <!--standard properties-->
         <java.version>1.8</java.version>
@@ -224,27 +219,6 @@
                 <artifactId>spring-boot-maven-plugin</artifactId>
             </plugin>
 
-            <plugin>
-                <groupId>com.spotify</groupId>
-                <artifactId>dockerfile-maven-plugin</artifactId>
-                <version>1.4.10</version>
-                <executions>
-                    <execution>
-                        <id>default</id>
-                        <goals>
-                            <goal>build</goal>
-                            <goal>push</goal>
-                        </goals>
-                    </execution>
-                </executions>
-                <configuration>
-                    <dockerfile>Dockerfile</dockerfile>
-                    <repository>${docker.image.name}</repository>
-                    <buildArgs>
-                        <JAR_FILE>${project.build.finalName}.jar</JAR_FILE>
-                    </buildArgs>
-                </configuration>
-            </plugin>
 
             <plugin>
                 <!-- Unit test runner -->
