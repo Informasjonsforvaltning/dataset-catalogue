@@ -14,7 +14,7 @@ application:
   harvesterUrl: http://harvester:8080
   openDataEnhet: https://data.brreg.no/enhetsregisteret/api/enheter/
   openDataEnhetProxy: ${ENHETSREGISTERET_PROXY_URL:http://nginx-enhetsregisteret-proxy:8080/enhetsregisteret/api/enheter/}
-  apiRootUrl: http://nginx-search:8080/api
+  apiRootUrl: http://fdk-nginx-search:8080/api
   # harvest every sixth hour
   harvestCron: 0 0 */6 * * *
 
