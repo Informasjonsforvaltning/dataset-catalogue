@@ -55,7 +55,7 @@ jobs:
           service_account_email: ${{ secrets.FDK_PROD_EMAIL }}
           service_account_key: ${{ secrets.FDK_PROD_AUTODEPLOY }}
       - run: |
-          gcloud compute --project fdk-prod disks snapshot "fdk-prod-registration-api --snapshot-names "autogcs-autodeploy-prod-registration-api-${GITHUB_SHA::8}" --zone "europe-north1-a" &
+          gcloud compute --project fdk-prod disks snapshot "fdk-prod-registration-api" --snapshot-names "autogcs-autodeploy-prod-registration-api-${GITHUB_SHA::8}" --zone "europe-north1-a" &
           wait
           gcloud compute --project fdk-prod snapshots add-labels "autogcs-autodeploy-prod-registration-api-${GITHUB_SHA::8}" --labels="snapshotdays="14""
 
