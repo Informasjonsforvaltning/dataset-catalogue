@@ -242,7 +242,7 @@ public class CatalogController {
      * @return String containing base uri
      */
     private String getRegistrationBaseUrl() {
-        return "http://registration-api:8080";
+        return "http://dataset-catalogue:8080";
     }
 
     private String getCatalogUri(String catalogId) {
