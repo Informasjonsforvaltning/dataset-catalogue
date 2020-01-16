@@ -11,7 +11,7 @@ application:
   catalogUriPrefix: http://localhost:8099
   harvesterUsername: ${registrationApi_harvesterUsername:test_admin}
   harvesterPassword: ${registrationApi_harvesterPassword:password}
-  harvesterUrl: http://harvester:8080
+  harvesterUrl: http://fdk-dataset-harvester-gui:8080
   openDataEnhet: https://data.brreg.no/enhetsregisteret/api/enheter/
   openDataEnhetProxy: ${ENHETSREGISTERET_PROXY_URL:http://fdk-nginx-enhetsregisteret-proxy:8080/enhetsregisteret/api/enheter/}
   apiRootUrl: http://fdk-nginx-search:8080/api
