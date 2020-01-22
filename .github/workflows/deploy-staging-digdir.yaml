@@ -42,7 +42,6 @@ jobs:
             helm repo add fdk https://informasjonsforvaltning.github.io/helm-chart/
             helm fetch --untar --untardir ./helm fdk/dataset-catalogue
             helm template --set DOCKER_IMAGE_NAME="eu.gcr.io/digdir-fdk-infra/dataset-catalogue:$GITHUB_SHA" -f ./helm/dataset-catalogue/values/staging-digdir.yaml ./helm/dataset-catalogue/ > ./kubectlapply.yaml
-            cat ./kubectlapply.yaml
             chmod o+w ./kubectlapply.yaml
             cat kubectlapply.yaml
 
