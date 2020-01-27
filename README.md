@@ -64,3 +64,31 @@ Registration api exposes several endpoints for CRUD on catalogs and dataset desc
 ## Dependencies
 * reference-data
 * elasticsearch
+
+## Run locally in IDEA
+Start local instances of dependencies
+```
+% docker-compose up -d
+```
+-d enables "detached mode"
+
+Add `-Dspring.profiles.active=develop` as a VM option in the Run/Debug Configuration
+
+Run (Shift+F10) or debug (Shift+F9) the application
+
+## Get an admin jwt:
+```
+% curl localhost:8084/jwt/admin -o jwt.txt
+```
+
+## Helpful commands
+
+Create catalogue, replace <token> with generated jwt
+```
+curl localhost:8115/catalogs -d '{"id":"910244132"}' -H 'content-type:application/json' -H 'Authorization: Bearer <token>' 
+```
+
+Create dataset, replace <token> with generated jwt
+```
+curl localhost:8115/catalogs/910244132/datasets -d '{}' -H 'content-type:application/json' -H 'Authorization: Bearer <token>' 
+```
