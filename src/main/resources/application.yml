@@ -65,13 +65,14 @@ server:
 application:
   organizationCatalogueUrl: http://localhost:8140
   harvesterUrl: http://localhost:8082
-  apiRootUrl: http://localhost:8080/api
+  apiRootUrl: http://localhost:8112/api
   openDataEnhetProxy: http://localhost:8132/enhetsregisteret/api/enheter/ #mock
 
 security:
   oauth2:
     resource:
-      jwk.key-set-uri: http://localhost:8084/auth/realms/fdk/protocol/openid-connect/certs
+      id: registration-api
+      jwk.key-set-uri: http://localhost:8084/jwk
 ---
 spring:
   profiles: unit-integration

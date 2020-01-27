@@ -1,0 +1,84 @@
+version: "3"
+
+services:
+
+  elasticsearch5:
+    image: docker.elastic.co/elasticsearch/elasticsearch:5.6.9
+    volumes:
+      - /usr/share/elasticsearch/data
+    ports:
+      - 9200:9200
+      - 9300:9300
+    environment:
+      - cluster.name=elasticsearch
+      - xpack.security.enabled=false
+      - xpack.monitoring.enabled=false
+      - ES_JAVA_OPTS=-Xms512m -Xmx512m
+
+  fdk-nginx-enhetsregisteret-proxy-mock:
+    image: eu.gcr.io/fdk-infra/fdk-nginx-enhetsregisteret-proxy-mock:latest
+    ports:
+      - 8132:8080
+
+  sso:
+    image: docker.pkg.github.com/informasjonsforvaltning/auth-utils-java/auth-utils-java:latest
+    ports:
+      - 8084:8084
+
+  reference-data:
+    image: eu.gcr.io/fdk-infra/reference-data:latest
+    ports:
+      - 8112:8080
+
+  organization-catalogue:
+    image: eu.gcr.io/fdk-infra/organization-catalogue:latest
+    depends_on:
+      - mongodb
+    restart: always
+    environment:
+      - MONGO_USERNAME=admin
+      - MONGO_PASSWORD=admin
+      - ENHETSREGISTERET_PROXY_URL=http://fdk-nginx-enhetsregisteret-proxy-mock:8080/enhetsregisteret/api/enheter/
+    ports:
+      - 8140:8080
+
+  mongodb:
+    image: mongo:latest
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=admin
+      - MONGO_INITDB_ROOT_PASSWORD=admin
+    ports:
+      - 27017:27017
+
+  fdk-dataset-harvester-gui:
+    image: eu.gcr.io/fdk-infra/fdk-dataset-harvester-gui:latest
+    ports:
+      - 8082:8080
+    depends_on:
+      - fdk-dataset-harvester
+
+  fdk-dataset-harvester:
+    image: eu.gcr.io/fdk-infra/fdk-dataset-harvester:latest
+    ports:
+      - 8106:8080
+    depends_on:
+      - fuseki
+      - elasticsearch5
+      - reference-data
+      - rabbitmq
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    environment:
+      - RABBITMQ_DEFAULT_USER=admin
+      - RABBITMQ_DEFAULT_PASS=admin
+    ports:
+      - 5672:5672
+      - 15672:15672
+
+  fuseki:
+    image: eu.gcr.io/fdk-infra/fdk-fuseki-service:latest
+    volumes:
+      - /etc/fuseki/databases/
+    ports:
+      - 3030:8080
