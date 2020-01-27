@@ -40,7 +40,7 @@ security:
   oauth2:
     resource:
       id: fdk-registration-api
-      jwk.key-set-uri: {JWK_KEY_SET_URI:http://sso:8084/auth/realms/fdk/protocol/openid-connect/certs}
+      jwk.key-set-uri: ${JWK_KEY_SET_URI:http://sso:8084/auth/realms/fdk/protocol/openid-connect/certs}
 
 server:
   tomcat:
