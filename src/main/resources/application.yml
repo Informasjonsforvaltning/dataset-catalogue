@@ -40,7 +40,7 @@ security:
   oauth2:
     resource:
       id: fdk-registration-api
-      jwk.key-set-uri: http://sso:8084/auth/realms/fdk/protocol/openid-connect/certs
+      jwk.key-set-uri: {JWK_KEY_SET_URI:http://sso:8084/auth/realms/fdk/protocol/openid-connect/certs}
 
 server:
   tomcat:
@@ -61,7 +61,7 @@ spring:
       clusterNodes: localhost:9300
       clusterName: elasticsearch
 server:
-  port: 8115
+  port: 8114
 application:
   organizationCatalogueUrl: http://localhost:8140
   harvesterUrl: http://localhost:8082

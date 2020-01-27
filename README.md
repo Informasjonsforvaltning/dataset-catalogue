@@ -85,10 +85,10 @@ Run (Shift+F10) or debug (Shift+F9) the application
 
 Create catalogue, replace <token> with generated jwt
 ```
-curl localhost:8115/catalogs -d '{"id":"910244132"}' -H 'content-type:application/json' -H 'Authorization: Bearer <token>' 
+curl localhost:8114/catalogs -d '{"id":"910244132"}' -H 'content-type:application/json' -H 'Authorization: Bearer <token>' 
 ```
 
 Create dataset, replace <token> with generated jwt
 ```
-curl localhost:8115/catalogs/910244132/datasets -d '{}' -H 'content-type:application/json' -H 'Authorization: Bearer <token>' 
+curl localhost:8114/catalogs/910244132/datasets -d '{}' -H 'content-type:application/json' -H 'Authorization: Bearer <token>' 
 ```
