@@ -22,6 +22,10 @@ public class DatasetRegistrationMigration {
     private static Logger logger = LoggerFactory.getLogger(DatasetRegistrationMigration.class);
 
     private static String convertHttpUriToHttps(String oldUri) {
+        if (oldUri == null || !oldUri.contains("http://psi.norge.no/los/")) {
+            return oldUri;
+        }
+
         return oldUri.replace("http://psi.norge.no/los/", "https://psi.norge.no/los/");
     }
 
