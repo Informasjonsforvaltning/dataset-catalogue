@@ -7,7 +7,7 @@ import no.dcat.datastore.domain.dcat.builders.DcatReader;
 import no.dcat.model.Catalog;
 import no.dcat.model.Dataset;
 import no.dcat.model.FramedCatalog;
-import no.dcat.service.CatalogRepository;
+import no.dcat.repository.CatalogRepository;
 import no.dcat.repository.DatasetRepository;
 import no.dcat.shared.SkosCode;
 import no.dcat.webutils.exceptions.NotFoundException;

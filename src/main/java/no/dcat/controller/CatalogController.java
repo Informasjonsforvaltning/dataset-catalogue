@@ -3,7 +3,7 @@ package no.dcat.controller;
 import lombok.RequiredArgsConstructor;
 import no.dcat.model.Catalog;
 import no.dcat.model.Enhet;
-import no.dcat.service.CatalogRepository;
+import no.dcat.repository.CatalogRepository;
 import no.dcat.service.EnhetService;
 import no.dcat.service.HarvesterService;
 import no.dcat.service.permission.PermissionService;

@@ -4,7 +4,7 @@
 //import no.dcat.model.Catalog;
 //import no.dcat.model.Dataset;
 //import no.dcat.repository.DatasetRepository;
-//import no.dcat.service.CatalogRepository;
+//import no.dcat.repository.CatalogRepository;
 //import no.dcat.testcategories.IntegrationTest;
 //import org.junit.Before;
 //import org.junit.ClassRule;
