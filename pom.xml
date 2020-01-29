@@ -32,7 +32,7 @@
         <node.version>v6.10.2</node.version>
         <npm.version>4.3.0</npm.version>
 
-        <start-class>no.dcat.RegisterApplication</start-class>
+        <start-class>no.dcat.DatasetCatalogueApplication</start-class>
         <docker.image.name>dcatno/dataset-catalogue</docker.image.name>
 
         <unittest.category/>
