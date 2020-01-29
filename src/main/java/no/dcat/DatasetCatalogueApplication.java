@@ -8,9 +8,9 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 @SpringBootApplication
 @EnableScheduling
 @EnableElasticsearchRepositories
-public class RegisterApplication {
+public class DatasetCatalogueApplication {
     public static void main(String... args) {
-        SpringApplication.run(RegisterApplication.class, args);
+        SpringApplication.run(DatasetCatalogueApplication.class, args);
     }
 }
 
