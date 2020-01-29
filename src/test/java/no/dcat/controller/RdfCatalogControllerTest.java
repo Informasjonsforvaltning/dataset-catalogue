@@ -4,7 +4,7 @@ import no.dcat.datastore.domain.dcat.smoke.TestCompleteCatalog;
 import no.dcat.model.Catalog;
 import no.dcat.model.Dataset;
 import no.dcat.repository.DatasetRepository;
-import no.dcat.service.CatalogRepository;
+import no.dcat.repository.CatalogRepository;
 import no.dcat.testcategories.UnitTest;
 import org.junit.Before;
 import org.junit.Test;

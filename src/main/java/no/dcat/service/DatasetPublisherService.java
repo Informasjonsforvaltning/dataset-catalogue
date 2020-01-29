@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import lombok.RequiredArgsConstructor;
 import no.dcat.model.Catalog;
 import no.dcat.model.Dataset;
+import no.dcat.repository.CatalogRepository;
 import no.dcat.webutils.exceptions.NotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

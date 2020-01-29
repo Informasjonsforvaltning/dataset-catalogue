@@ -6,6 +6,7 @@ import no.dcat.common.model.Concept;
 import no.dcat.factory.DatasetFactory;
 import no.dcat.model.Catalog;
 import no.dcat.model.Dataset;
+import no.dcat.repository.CatalogRepository;
 import no.dcat.repository.DatasetRepository;
 import no.dcat.shared.Publisher;
 import no.dcat.shared.Subject;

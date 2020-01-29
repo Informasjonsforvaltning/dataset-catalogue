@@ -3,7 +3,7 @@
 //import com.google.gson.Gson;
 //import no.dcat.datastore.ElasticDockerRule;
 //import no.dcat.model.Catalog;
-//import no.dcat.service.CatalogRepository;
+//import no.dcat.repository.CatalogRepository;
 //import no.dcat.shared.admin.DcatSourceDto;
 //import no.dcat.testcategories.IntegrationTest;
 //import org.apache.commons.codec.binary.Base64;
