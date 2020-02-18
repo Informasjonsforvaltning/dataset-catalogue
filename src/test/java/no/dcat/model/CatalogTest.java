@@ -1,14 +1,13 @@
 package no.dcat.model;
 
-import no.dcat.testcategories.UnitTest;
-import org.junit.Test;
-import org.junit.experimental.categories.Category;
+import org.junit.jupiter.api.Tag;
+import org.junit.jupiter.api.Test;
 
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
 import static org.junit.Assert.assertThat;
 
-@Category(UnitTest.class)
+@Tag("unit")
 public class CatalogTest {
 
 

@@ -1,8 +1,7 @@
 package no.dcat.model;
 
-import no.dcat.testcategories.UnitTest;
-import org.junit.Test;
-import org.junit.experimental.categories.Category;
+import org.junit.jupiter.api.Tag;
+import org.junit.jupiter.api.Test;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -10,18 +9,18 @@ import java.util.Map;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
 
-@Category(UnitTest.class)
+@Tag("unit")
 public class DatasetTest {
 
     @Test
-    public void sameId_isEqual() throws Exception {
+    public void sameId_isEqual() {
         Dataset dataset = new Dataset("1");
         Dataset dataset1 = new Dataset("1");
         assertThat(dataset, is(dataset1));
     }
 
     @Test
-    public void toString_makesSense() throws Exception {
+    public void toString_makesSense() {
         Dataset dataset = new Dataset("1");
         Map languangeDescription = new HashMap();
         languangeDescription.put("no", "test");
