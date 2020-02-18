@@ -1,9 +1,8 @@
 package no.dcat.model;
 
 import no.dcat.factory.DatasetFactory;
-import no.dcat.testcategories.UnitTest;
-import org.junit.Test;
-import org.junit.experimental.categories.Category;
+import org.junit.jupiter.api.Tag;
+import org.junit.jupiter.api.Test;
 
 import static org.hamcrest.Matchers.containsString;
 import static org.junit.Assert.assertThat;
@@ -11,7 +10,7 @@ import static org.junit.Assert.assertThat;
 /**
  * Created by bjg on 02.05.2018.
  */
-@Category(UnitTest.class)
+@Tag("unit")
 public class DatasetFactoryTest {
 
     @Test

@@ -5,12 +5,12 @@ import no.dcat.model.Catalog;
 import no.dcat.model.Dataset;
 import no.dcat.repository.DatasetRepository;
 import no.dcat.repository.CatalogRepository;
-import no.dcat.testcategories.UnitTest;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.experimental.categories.Category;
+import org.junit.jupiter.api.Tag;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -25,7 +25,6 @@ import java.util.function.Function;
 
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
@@ -33,11 +32,12 @@ import static org.mockito.Mockito.when;
  * Created by dask on 21.04.2017.
  */
 
-@Category(UnitTest.class)
+@Tag("unit")
+@ExtendWith(MockitoExtension.class)
 public class RdfCatalogControllerTest {
 
+    @InjectMocks
     private RdfCatalogController controller;
-    private Catalog catalog;
 
     @Mock
     private DatasetRepository mockDR;
@@ -45,21 +45,12 @@ public class RdfCatalogControllerTest {
     @Mock
     private CatalogRepository mockCR;
 
-    @Before
-    public void setup() {
-        MockitoAnnotations.initMocks(this);
-        catalog = new Catalog();
+    @Test
+    public void getDcatRepOK() throws Throwable {
+        Catalog catalog = new Catalog();
         BeanUtils.copyProperties(TestCompleteCatalog.getCompleteCatalog(), catalog);
 
         when(mockCR.findById(anyString())).thenReturn(Optional.of(catalog));
-
-        //when(controller.getCatalogRepository()).thenReturn(mockCR);
-        controller = new RdfCatalogController(mockCR, mockDR);
-
-    }
-
-    @Test
-    public void getDcatRepOK() throws Throwable {
         String catalogId = catalog.getId();
 
         Page<Dataset> pagedDataset = new Page<Dataset>() {
@@ -147,8 +138,6 @@ public class RdfCatalogControllerTest {
                 return null;
             }
         };
-
-        when(mockDR.findByCatalogId(anyString(), (Pageable) any())).thenReturn(pagedDataset);
 
         HttpEntity<Catalog> actualEntity = controller.getCatalog(catalogId);
 

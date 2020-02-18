@@ -1,55 +1,38 @@
 package no.dcat.controller;
 
-
 import no.dcat.datastore.domain.dcat.builders.DcatReader;
 import no.dcat.model.Dataset;
 import no.dcat.shared.SkosCode;
-import no.dcat.testcategories.UnitTest;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.util.FileManager;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.experimental.categories.Category;
+import org.junit.jupiter.api.Tag;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.*;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.doReturn;
 
-@Category(UnitTest.class)
+@Tag("unit")
+@ExtendWith(MockitoExtension.class)
 public class ImportControllerTest {
     static Logger logger = LoggerFactory.getLogger(ImportControllerTest.class);
 
-    ImportController importController;
-    Model model;
-
-    @Before
-    public void setup() {
-        model = FileManager.get().loadModel("export.jsonld");
-
-        ImportController imp = new ImportController(null, null);
-        importController = Mockito.spy(imp);
-    }
-
     @Test
     public void publisherContainsMultipleNamesWhenOnlyOneIsExpected() throws Throwable {
-        model = FileManager.get().loadModel("ut1-export.ttl");
+        Model model = FileManager.get().loadModel("ut1-export.ttl");
 
         ImportController impController = new ImportController(null, null);
         ImportController iController = Mockito.spy(impController);
-        Map<String, String> prefLabel = new HashMap<>();
-        prefLabel.put("no", "test");
 
-        doReturn(prefLabel).when(iController).getLabelForCode(anyString(), anyString());
         doReturn(new DcatReader(model)).when(iController).getDcatReader(any());
 
         List<Dataset> ds = iController.parseDatasets(model);
@@ -59,14 +42,11 @@ public class ImportControllerTest {
 
     @Test
     public void parseSetsPublisher() throws Throwable {
-        model = FileManager.get().loadModel("ut1-export.ttl");
+        Model model = FileManager.get().loadModel("ut1-export.ttl");
 
         ImportController importController = new ImportController(null, null);
         ImportController iController = Mockito.spy(importController);
-        Map<String, String> prefLabel = new HashMap<>();
-        prefLabel.put("no", "test");
 
-        doReturn(prefLabel).when(iController).getLabelForCode(anyString(), anyString());
         doReturn(new DcatReader(model)).when(iController).getDcatReader(any());
 
         List<Dataset> ds = iController.parseDatasets(model);
@@ -75,39 +55,6 @@ public class ImportControllerTest {
             assertThat(String.format("dataset %s has null publisher", dataset.getId()), dataset.getPublisher(), is(not(nullValue())));
         });
     }
-
-    /*
-    @Test
-    public void importDatasetSetsPublisher() throws Throwable {
-
-        model = FileManager.get().loadModel("ut1-export.ttl");
-        String catalogId = "974760673";
-        Publisher publisher = new Publisher();
-        publisher.setName("BRREG");
-        Catalog catalogId = new Catalog();
-        catalogId.setId(catalogId);
-        catalogId.setPublisher(publisher);
-
-        ImportController importController = new ImportController();
-        DatasetController datasetController = new DatasetController(null,null);
-        importController.datasetController = datasetController;
-
-        ImportController iController = Mockito.spy(importController);
-        Map<String,String> prefLabel = new HashMap<>();
-        prefLabel.put("no", "test");
-
-        doNothing().when(iController).fetchCodes();
-        doReturn(prefLabel).when(iController).getLabelForCode(anyString(), anyString());
-
-
-        List<Dataset> datasets = iController.parseAndSaveDatasets(model,  catalogId, catalogId );
-
-        datasets.forEach( dataset -> {
-            logger.warn(dataset.getId() + " " + dataset.getPublisher().getName() + " " + dataset.getRegistrationStatus());
-
-        });
-    }
-*/
 
     @Test
     public void testLanguagePruning() {

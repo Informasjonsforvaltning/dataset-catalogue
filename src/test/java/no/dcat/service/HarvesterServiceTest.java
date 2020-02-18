@@ -1,41 +1,41 @@
 package no.dcat.service;
 
-import com.github.tomakehurst.wiremock.junit.WireMockRule;
+import com.github.tomakehurst.wiremock.WireMockServer;
 import no.dcat.model.Catalog;
 import no.dcat.shared.admin.DcatSourceDto;
-import no.dcat.testcategories.UnitTest;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.experimental.categories.Category;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Tag;
+import org.junit.jupiter.api.Test;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
-import static com.github.tomakehurst.wiremock.core.WireMockConfiguration.wireMockConfig;
 import static junit.framework.TestCase.assertTrue;
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * Created by bjg on 20.02.2018.
  */
-@Category(UnitTest.class)
+@Tag("unit")
 public class HarvesterServiceTest {
 
-    @Rule
-    public WireMockRule wireMockRule = new WireMockRule(wireMockConfig().dynamicPort());
+    private WireMockServer server = new WireMockServer(8080);
 
+    @AfterEach
+    void stopServer() {
+        server.stop();
+    }
 
     @Test
-    public void getHarvestEntriesReturnsCorrectNumberOFEntries() throws Exception {
+    public void getHarvestEntriesReturnsCorrectNumberOFEntries() {
+        harvesterResponseGetDcatSourcesWireMockStub();
 
         HarvesterService hs = new HarvesterService();
-        hs.harvesterUrl = "http://localhost:" + wireMockRule.port();
+        hs.harvesterUrl = "http://localhost:" + server.port();
         hs.harvesterUsername = "testuser";
         hs.harvesterPassword = "testpasword";
-
-        harvesterResponseGetDcatSourcesWireMockStub();
 
         List<DcatSourceDto> result = hs.getHarvestEntries();
         assertTrue(result.size() == 2);
@@ -44,14 +44,13 @@ public class HarvesterServiceTest {
 
 
     @Test
-    public void harvestEntryContainsCorrectUri() throws Exception {
+    public void harvestEntryContainsCorrectUri() {
+        harvesterResponseGetDcatSourcesWireMockStub();
 
         HarvesterService hs = new HarvesterService();
-        hs.harvesterUrl = "http://localhost:" + wireMockRule.port();
+        hs.harvesterUrl = "http://localhost:" + server.port();
         hs.harvesterUsername = "testuser";
         hs.harvesterPassword = "testpasword";
-
-        harvesterResponseGetDcatSourcesWireMockStub();
 
         List<DcatSourceDto> result = hs.getHarvestEntries();
         assertEquals(result.get(1).getUrl(), "http://test.test.no");
@@ -60,14 +59,13 @@ public class HarvesterServiceTest {
 
 
     @Test
-    public void createHarvestEntryWorks() throws Exception {
+    public void createHarvestEntryWorks() {
+        harvesterResponsePostDcatSourceWireMockStub();
 
         HarvesterService hs = new HarvesterService();
-        hs.harvesterUrl = "http://localhost:" + wireMockRule.port();
+        hs.harvesterUrl = "http://localhost:" + server.port();
         hs.harvesterUsername = "testuser";
         hs.harvesterPassword = "testpasword";
-
-        harvesterResponsePostDcatSourceWireMockStub();
 
         Catalog catalog = new Catalog();
         catalog.setId("123455");
@@ -86,7 +84,7 @@ public class HarvesterServiceTest {
      * Simulate response from harvester
      */
     private void harvesterResponseGetDcatSourcesWireMockStub() {
-        stubFor(get(urlEqualTo("/api/admin/dcat-sources"))
+        server.stubFor(get(urlEqualTo("/api/admin/dcat-sources"))
             .withHeader("Accept", containing("application/json"))
             .willReturn(aResponse()
                 .withStatus(200)
@@ -108,6 +106,7 @@ public class HarvesterServiceTest {
                     "    }\n" +
                     "]")));
 
+        server.start();
     }
 
 
@@ -115,9 +114,10 @@ public class HarvesterServiceTest {
      * Simulate response from harvester
      */
     private void harvesterResponsePostDcatSourceWireMockStub() {
-        stubFor(post(urlEqualTo("/api/admin/dcat-source"))
+        server.stubFor(post(urlEqualTo("/api/admin/dcat-source"))
             .willReturn(aResponse()
                 .withStatus(202)));
 
+        server.start();
     }
 }
