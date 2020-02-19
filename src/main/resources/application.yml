@@ -86,4 +86,17 @@ spring:
 application:
   themesServiceUrl: http://localhost:8100
   harvesterUrl: http://localhost:8082
-
+---
+spring:
+  profiles: contract-test
+application:
+  apiRootUrl: ${WIREMOCK_TEST_HOST}/api
+  organizationCatalogueUrl: ${WIREMOCK_TEST_HOST}/org
+  harvesterUrl: ${WIREMOCK_TEST_HOST}/harvest
+  openDataEnhetProxy: ${WIREMOCK_TEST_HOST}/enhetsregisteret/api/enheter/
+security:
+  oauth2:
+    resource:
+      jwk.key-set-uri: ${WIREMOCK_TEST_HOST}/auth/realms/fdk/protocol/openid-connect/certs
+server:
+  port: 8080
