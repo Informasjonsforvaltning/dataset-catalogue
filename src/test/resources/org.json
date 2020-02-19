@@ -1,0 +1,9 @@
+{
+  "uri": "http://data.brreg.no/enhetsregisteret/enhet/123456789",
+  "id": "910244132",
+  "name": "TESTORGANISASJON",
+  "orgPath": "/STAT/123456789/910244132",
+  "prefLabel": {
+    "no": "Testorganisasjon"
+  }
+}
