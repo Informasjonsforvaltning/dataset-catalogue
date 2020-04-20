@@ -7,11 +7,7 @@ import no.dcat.shared.DataDistributionService;
 import no.dcat.datastore.domain.dcat.vocabulary.DCAT;
 import no.dcat.datastore.domain.dcat.vocabulary.DCATapi;
 import no.dcat.shared.Types;
-import org.apache.jena.rdf.model.Model;
-import org.apache.jena.rdf.model.ResIterator;
-import org.apache.jena.rdf.model.Resource;
-import org.apache.jena.rdf.model.Statement;
-import org.apache.jena.rdf.model.StmtIterator;
+import org.apache.jena.rdf.model.*;
 import org.apache.jena.sparql.vocabulary.FOAF;
 import org.apache.jena.vocabulary.DCTerms;
 import org.apache.jena.vocabulary.RDF;
@@ -21,6 +17,7 @@ import org.slf4j.LoggerFactory;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 
 public class DistributionBuilder extends AbstractBuilder {
@@ -115,10 +112,7 @@ public class DistributionBuilder extends AbstractBuilder {
             dist.setPage(extractSkosConcept(distResource, FOAF.page));
             dist.setFormat(extractMultipleStringsExcludeBaseUri(distResource, DCTerms.format));
 
-
-            dist.setType(extractAsString(distResource, DCTerms.type));
-
-            dist.setAccessService(getDataDistributionService(distResource));
+            dist.setAccessService(getDistributionAccessServices(distResource));
 
         }
 
@@ -126,22 +120,16 @@ public class DistributionBuilder extends AbstractBuilder {
     }
 
 
-    public static DataDistributionService getDataDistributionService(Resource distResource) {
-        StmtIterator distributionServiceIterator = distResource.listProperties(DCATapi.accessService);
-
-        if(distributionServiceIterator.hasNext()){
-            //we only allow one DataDistributionService per distribution
-            Statement next = distributionServiceIterator.next();
-            if(next.getObject().isResource()) {
-                Resource distributionService = next.getResource();
-                return DataDistributionServiceBuilder.create(distributionService);
-
-            } else {
-                return null;
-            }
-        } else {
-            return null;
-        }
+    public static List<DataDistributionService> getDistributionAccessServices(Resource distributionResource) {
+        return distributionResource
+                .listProperties(DCATapi.accessService)
+                .toList()
+                .stream()
+                .map(Statement::getObject)
+                .filter(RDFNode::isResource)
+                .map(RDFNode::asResource)
+                .map(DataDistributionServiceBuilder::create)
+                .collect(Collectors.toList());
     }
 
 }

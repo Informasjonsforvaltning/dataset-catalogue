@@ -451,8 +451,6 @@ public class DcatBuilder {
                         addSkosConcepts(disRes, FOAF.page, distribution.getPage(), FOAF.Document);
                         addLiterals(disRes, DCTerms.format, distribution.getFormat());
 
-                        addLiteral(disRes, DCTerms.type, distribution.getType());
-
                         addDataDistributionService(distribution.getAccessService(), disRes);
 
 
@@ -631,29 +629,34 @@ public class DcatBuilder {
         }
     }
 
-    public void addDataDistributionService(DataDistributionService distributionService, Resource resource) {
-        if (distributionService != null) {
-            try {
-                Resource distributionServiceRes = null;
-                if (distributionService.getUri() != null) {
-                    distributionServiceRes = model.createResource(distributionService.getUri());
-                } else {
-                    distributionServiceRes = model.createResource(UUID.randomUUID().toString());
+    public void addDataDistributionService(List<DataDistributionService> distributionServices, Resource resource) {
+        if (distributionServices != null) {
+            distributionServices.forEach(distributionService -> {
+                try {
+                    Resource distributionServiceRes = null;
+                    if (distributionService.getUri() != null) {
+                        distributionServiceRes = model.createResource(distributionService.getUri());
+                    } else {
+                        distributionServiceRes = model.createResource(UUID.randomUUID().toString());
+                    }
+
+                    distributionServiceRes.addProperty(RDF.type, DCATapi.DataDistributionService);
+
+                    addLiteral(distributionServiceRes, DCTerms.identifier, distributionService.getId());
+                    addLiterals(distributionServiceRes, DCTerms.title, distributionService.getTitle());
+                    addLiterals(distributionServiceRes, DCTerms.description, distributionService.getDescription());
+                    addPublisher(distributionServiceRes, DCTerms.publisher, distributionService.getPublisher());
+                    addSkosConcepts(distributionServiceRes, DCATapi.endpointDescription, distributionService.getEndpointDescription(), FOAF.Document);
+
+                    // TODO: add dcat:endpointURLs and make sure front-end sends necessary data (https://doc.difi.no/review/dcat-ap-no/#_obligatoriske_egenskaper_for_datatjeneste)
+                    // TODO: add a list of dct:MediaTypes (https://doc.difi.no/review/dcat-ap-no/#distribusjon-medietype)
+
+                    resource.addProperty(DCATapi.accessService, distributionServiceRes);
+
+                } catch (Exception e) {
+                    logger.error("Unable to export dataDistributionService {}. Reason {}", distributionService.getTitle(), e.getLocalizedMessage(), e);
                 }
-
-                distributionServiceRes.addProperty(RDF.type, DCATapi.DataDistributionService);
-
-                addLiteral(distributionServiceRes, DCTerms.identifier, distributionService.getId());
-                addLiterals(distributionServiceRes, DCTerms.title, distributionService.getTitle());
-                addLiterals(distributionServiceRes, DCTerms.description, distributionService.getDescription());
-                addPublisher(distributionServiceRes, DCTerms.publisher, distributionService.getPublisher());
-                addSkosConcepts(distributionServiceRes, DCATapi.endpointDescription, distributionService.getEndpointDescription(), FOAF.Document);
-
-                resource.addProperty(DCATapi.accessService, distributionServiceRes);
-
-            } catch (Exception e) {
-                logger.error("Unable to export dataDistributionService {}. Reason {}", distributionService.getTitle(), e.getLocalizedMessage(), e);
-            }
+            });
         }
     }
 
