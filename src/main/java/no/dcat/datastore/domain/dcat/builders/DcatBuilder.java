@@ -19,33 +19,18 @@ import no.dcat.shared.SkosCode;
 import no.dcat.shared.SkosConcept;
 import no.dcat.shared.Subject;
 import org.apache.jena.datatypes.xsd.XSDDatatype;
-import org.apache.jena.rdf.model.Literal;
-import org.apache.jena.rdf.model.Model;
-import org.apache.jena.rdf.model.ModelFactory;
-import org.apache.jena.rdf.model.Property;
-import org.apache.jena.rdf.model.Resource;
+import org.apache.jena.rdf.model.*;
 import org.apache.jena.sparql.vocabulary.FOAF;
-import org.apache.jena.vocabulary.DCAT;
-import org.apache.jena.vocabulary.DCTerms;
-import org.apache.jena.vocabulary.RDF;
-import org.apache.jena.vocabulary.SKOS;
-import org.apache.jena.vocabulary.VCARD4;
-import org.apache.jena.vocabulary.XSD;
+import org.apache.jena.vocabulary.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.ByteArrayOutputStream;
 import java.io.OutputStream;
+import java.io.StringWriter;
 import java.lang.reflect.Method;
 import java.text.SimpleDateFormat;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * Created by dask on 10.04.2017.
@@ -79,6 +64,7 @@ public class DcatBuilder {
         model.setNsPrefix("oa", OA.NS);
         model.setNsPrefix("dqv", DQV.NS);
         model.setNsPrefix("rdf", RDF.uri);
+        model.setNsPrefix("rdfs", RDFS.uri);
         model.setNsPrefix("skos", SKOS.uri);
         model.setNsPrefix("schema", "http://schema.org/");
     }
@@ -182,6 +168,7 @@ public class DcatBuilder {
                         addQualityAnnotation(datRes, DQV.hasQualityAnnotation, dataset.getHasRelevanceAnnotation());
 
                         addReferences(datRes, dataset.getReferences());
+                        addRelations(datRes, dataset.getRelations());
                         addProperty(datRes, DCTerms.provenance, dataset.getProvenance());
                         addStringLiterals(datRes, DCTerms.identifier, dataset.getIdentifier());
 
@@ -252,6 +239,14 @@ public class DcatBuilder {
         }
     }
 
+    private void addRelations(Resource resource, List<SkosConcept> relations) {
+        if (relations != null) {
+            relations.stream()
+                    .filter(Objects::nonNull)
+                    .forEach(relation -> addRelation(resource, relation));
+        }
+    }
+
     private void addReference(Resource datRes, Reference reference) {
         if (reference != null) {
 
@@ -304,6 +299,24 @@ public class DcatBuilder {
         }
     }
 
+    private void addRelation(Resource resource, SkosConcept relation) {
+        String relationUri = relation.getUri();
+        Map<String, String> labels = relation.getPrefLabel();
+
+        if (!isNullOrEmpty(relationUri)) {
+            Resource relationResource = model.createResource(relationUri).addProperty(RDF.type, RDFS.Resource);
+
+            if (!labels.isEmpty()) {
+                labels.forEach((key, value) -> {
+                    if (!isNullOrEmpty(value)) {
+                        relationResource.addProperty(RDFS.label, ResourceFactory.createLangLiteral(value, key));
+                    }
+                });
+            }
+
+            resource.addProperty(DCTerms.relation, relationResource);
+        }
+    }
 
     private void addQualityAnnotation(Resource datRes, Property hasQualityAnnotation, QualityAnnotation annotation) {
         if (annotation != null) {

@@ -5,6 +5,10 @@ import no.dcat.datastore.domain.dcat.builders.DcatBuilder;
 import no.dcat.datastore.domain.dcat.smoke.TestCompleteCatalog;
 import no.dcat.model.Catalog;
 import no.dcat.model.Dataset;
+import no.dcat.shared.SkosConcept;
+import org.apache.jena.rdf.model.Model;
+import org.apache.jena.rdf.model.ModelFactory;
+import org.apache.jena.riot.RDFDataMgr;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
@@ -12,15 +16,15 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.test.context.ActiveProfiles;
 
+import java.io.StringReader;
+import java.io.StringWriter;
 import java.lang.reflect.Type;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
 
 /**
  * Created by dask on 12.04.2017.
@@ -43,6 +47,40 @@ public class DcatBuilderTest {
         assertThat(actual, is(notNullValue()));
         logger.debug("actual DCAT \n{}", actual);
 
+    }
+
+    @Test
+    public void mustCorrectlySerialiseDatasetRelations() {
+        Catalog catalog = new Catalog();
+        Dataset dataset = new Dataset();
+
+        dataset.setId("http://catalog/1/dataset/1");
+        dataset.setUri("http://catalog/1/dataset/1");
+        dataset.setRelations(
+                Arrays.asList(
+                        SkosConcept.getInstance(
+                                "http://uri-1",
+                                new HashMap<String, String>() {{
+                                    put("nb", "label-1-nb");
+                                    put("en", "label-1-en");
+                                }}),
+                        SkosConcept.getInstance(
+                                "http://uri-2",
+                                new HashMap<String, String>() {{
+                                    put("nb", "label-2-nb");
+                                    put("en", "label-2-en");
+                                }})
+                ))
+        ;
+
+        catalog.setId("http://catalog/1");
+        catalog.setUri("http://catalog/1");
+        catalog.setDataset(Collections.singletonList(dataset));
+
+        Model model = ModelFactory.createDefaultModel().read(new StringReader(DcatBuilder.transform(catalog, "TURTLE")), null, "TURTLE");
+        Model expectedModel = RDFDataMgr.loadModel("catalog-with-dataset-with-relations.ttl");
+
+        assertTrue(model.isIsomorphicWith(expectedModel));
     }
 
 
