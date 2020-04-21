@@ -9,14 +9,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 public class TestCompleteCatalog {
 
@@ -200,6 +193,23 @@ public class TestCompleteCatalog {
 
         dataset.setReferences(Arrays.asList(
                 new Reference(hasVersion, referencedDataset)));
+
+        dataset.setRelations(
+                Arrays.asList(
+                        SkosConcept.getInstance(
+                                "http://uri-1",
+                                new HashMap<String, String>() {{
+                                    put("nb", "label-1-nb");
+                                    put("en", "label-1-en");
+                                }}),
+                        SkosConcept.getInstance(
+                                "http://uri-2",
+                                new HashMap<String, String>() {{
+                                    put("nb", "label-2-nb");
+                                    put("en", "label-2-en");
+                                }})
+                ))
+        ;
 
         dataset.setIdentifier(Collections.singletonList("42"));
         dataset.setPage(Collections.singletonList("http://uri1"));

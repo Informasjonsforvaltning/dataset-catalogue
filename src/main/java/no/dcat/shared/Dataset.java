@@ -118,6 +118,10 @@ public class Dataset {
     //Norwegian: Refererer til.
     private List<Reference> references;
 
+    //dct:relation
+    //Generic relations to resources
+    private List<SkosConcept> relations;
+
     //dct:provenance
     //Norwegian: Opphav
     private SkosCode provenance;
