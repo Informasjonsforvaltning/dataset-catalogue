@@ -19,6 +19,8 @@ public class Dataset {
 
     private String uri;
 
+    private String originalUri;
+
     private String source;
     private HarvestMetadata harvest;
 

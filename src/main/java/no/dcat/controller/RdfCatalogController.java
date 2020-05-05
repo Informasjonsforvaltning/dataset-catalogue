@@ -62,7 +62,12 @@ public class RdfCatalogController {
 
         if (datasets != null) {
             List<no.dcat.shared.Dataset> theList = new ArrayList<>();
-            datasets.forEach(theList::add);
+            datasets.forEach(dataset -> {
+                if(dataset.getOriginalUri() != null) {
+                    dataset.setUri(dataset.getOriginalUri());
+                }
+                    theList.add(dataset);
+            });
             catalog.setDataset(theList);
             logger.info("exported {} datasets", datasets.getTotalElements());
         }

@@ -77,6 +77,42 @@ fun apiAuthorizedRequest(endpoint : String, body: String?, token: String?, metho
     }
 }
 
+fun turtleApiAuthorizedRequest(endpoint : String, token: String?, method: String): Map<String, Any> {
+    val connection  = URL(getApiAddress(endpoint)).openConnection() as HttpURLConnection
+    connection.requestMethod = method
+    connection.setRequestProperty("Accept", "text/turtle")
+
+    if(!token.isNullOrEmpty()) {
+        connection.setRequestProperty("Authorization", "Bearer $token")
+    }
+
+    return try {
+
+        if(isOK(connection.responseCode)) {
+            mapOf(
+                    "body"   to connection.inputStream.bufferedReader().use(BufferedReader :: readText),
+                    "header" to connection.headerFields.toString(),
+                    "status" to connection.responseCode
+            )
+        } else {
+            mapOf(
+                    "status" to connection.responseCode,
+                    "header" to " ",
+                    "body" to " "
+            )
+        }
+    } catch (e: Exception) {
+        mapOf(
+                "status" to e.toString(),
+                "header" to " ",
+                "body"   to " "
+        )
+    }
+}
+
+
+
+
 private fun isOK(response: Int?): Boolean =
     if(response == null) false
     else HttpStatus.resolve(response)?.is2xxSuccessful == true
