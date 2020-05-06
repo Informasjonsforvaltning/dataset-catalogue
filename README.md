@@ -81,6 +81,11 @@ Run (Shift+F10) or debug (Shift+F9) the application
 % curl localhost:8084/jwt/admin -o jwt.txt
 ```
 
+## Get a write token for an organization jwt:
+```
+% curl localhost:8084/jwt/write -o jwt.txt
+```
+
 ## Helpful commands
 
 Create catalogue, replace <token> with generated jwt
@@ -92,3 +97,7 @@ Create dataset, replace <token> with generated jwt
 ```
 curl localhost:8114/catalogs/910244132/datasets -d '{}' -H 'content-type:application/json' -H 'Authorization: Bearer <token>' 
 ```
+
+## Troubleshooting:
+### ClassNotFoundException: javax.xml.bind.JAXBException
+You are running the wrong java version, switch to java 8
