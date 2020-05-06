@@ -13,7 +13,9 @@ class ResourceRoleFactory {
             String resourceId = parts[1];
             String resourceRole = parts[2];
 
-            if (OrganizationResourceRole.resourceType.equals(resourceType)) {
+            if (OrganizationResourceRole.adminResource.equals(roleToken)) {
+                return new OrganizationResourceRole("root", OrganizationResourceRole.OrganizationRole.admin);
+            } else if (OrganizationResourceRole.resourceType.equals(resourceType)) {
                 return new OrganizationResourceRole(resourceId, OrganizationResourceRole.OrganizationRole.valueOf(resourceRole));
             }
             throw new IllegalArgumentException("Unknown resourceType");
