@@ -30,6 +30,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 import static no.dcat.service.permission.OrganizationResourceRole.OrganizationPermission;
@@ -106,13 +107,16 @@ public class CatalogController {
     @PreAuthorize("hasPermission('root', 'system', 'admin')")
     @RequestMapping(value = "/admin", method = POST,
         consumes = APPLICATION_JSON_VALUE)
-    public Catalog adminCreateCatalog(@RequestBody String orgnr) {
-        logger.info("Admin create catalog: {}.", orgnr);
-        Catalog newCatalog = new Catalog(orgnr);
+    public Catalog adminCreateCatalogDatasource(@RequestBody String orgnr) throws NotFoundException {
+        logger.info("Admin create catalog datasource: {}.", orgnr);
+        Optional<Catalog> catalog = catalogRepository.findById(orgnr);
+        if (!catalog.isPresent()) {
+            throw new NotFoundException();
+        }
 
-        Catalog savedCatalog = saveCatalog(newCatalog);
+        createDatasourceInHarvester(catalog.get());
 
-        return savedCatalog;
+        return catalog.get();
     }
 
     private Catalog saveCatalog(Catalog catalog) {
