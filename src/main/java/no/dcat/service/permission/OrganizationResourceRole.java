@@ -9,7 +9,6 @@ import lombok.Setter;
 @Setter
 @RequiredArgsConstructor
 public final class OrganizationResourceRole implements ResourceRole {
-    static final String adminResource = "system:root:admin";
     static final String resourceType = "organization";
     @NonNull
     private String resourceId;
@@ -36,8 +35,7 @@ public final class OrganizationResourceRole implements ResourceRole {
     }
 
     public Boolean matchPermission(String resourceType, String resourceId, String permission) {
-        return adminResource.equals(resourceType + ":" + resourceId + ":" + permission)
-            || matchResource(resourceType, resourceId) && matchPermission(OrganizationPermission.valueOf(permission));
+        return matchResource(resourceType, resourceId) && matchPermission(OrganizationPermission.valueOf(permission));
     }
 
     public enum OrganizationPermission {
