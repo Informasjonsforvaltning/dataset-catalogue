@@ -48,10 +48,4 @@ public class DatasetController {
     public void removeDataset(@PathVariable("catalogId") String catalogId, @PathVariable("datasetId") String datasetId) {
         datasetService.removeDataset(catalogId, datasetId);
     }
-
-    @PreAuthorize("hasPermission('root', 'system', 'admin')")
-    @PostMapping(value = "/admin",consumes = APPLICATION_JSON_UTF8_VALUE, produces = APPLICATION_JSON_UTF8_VALUE)
-    public Dataset adminCreateDataset(@PathVariable("catalogId") String catalogId, @RequestBody Dataset data) throws FDKException {
-        return datasetService.adminUpdateDataset(datasetService.adminCreateDataset(catalogId, new Dataset()), data);
-    }
 }

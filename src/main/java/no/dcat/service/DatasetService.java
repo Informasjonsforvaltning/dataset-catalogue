@@ -73,38 +73,6 @@ public class DatasetService {
         return createdDataset;
     }
 
-    public Dataset adminCreateDataset(String catalogId, Dataset dataset) throws FDKException {
-        logger.info("Fetching catalog with ID {}", catalogId);
-        Catalog catalog = catalogRepository.findById(catalogId).orElseThrow(NotFoundException::new);
-
-        if (dataset.getPublisher() != null) {
-            logger.info("Dataset publisher is set");
-            validateDatasetPublisher(catalog.getPublisher(), dataset.getPublisher());
-        }
-
-        logger.info("Admin creating dataset in catalog with ID {}", catalog.getId());
-        Dataset createdDataset = datasetRepository.save(DatasetFactory.create(catalog, dataset));
-        logger.info("Admin created dataset with ID {} in catalog with ID {}", createdDataset.getId(), catalogId);
-
-        return createdDataset;
-    }
-
-    public Dataset adminUpdateDataset(Dataset dataset, Dataset patch) throws FDKException {
-        logger.info("Admin updating dataset with ID {} for catalog with ID {}", dataset.getId(), dataset.getCatalogId());
-
-        dataset = applyPatch(dataset, patch);
-        logger.info("Applied patch successfully to dataset with ID {} for catalog with ID {}", dataset.getId(), dataset.getCatalogId());
-
-        if (patch.getPublisher() != null) {
-            updateDatasetPublisher(patch.getPublisher(), dataset);
-        }
-
-        logger.info("Admin updated dataset with ID {} in catalog with ID {} ready to be saved", dataset.getId(), dataset.getCatalogId());
-        dataset = datasetRepository.save(dataset);
-
-        return dataset;
-    }
-
     public Dataset updateDataset(Dataset dataset, Dataset patch) throws FDKException {
         logger.info("Updating dataset with ID {} for catalog with ID {}", dataset.getId(), dataset.getCatalogId());
         boolean previouslyPublished = isDatasetPublished(dataset);

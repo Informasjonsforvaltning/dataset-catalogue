@@ -28,7 +28,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
@@ -94,23 +93,6 @@ public class CatalogController {
 
         Catalog savedCatalog = saveCatalog(catalog);
         createDatasourceInHarvester(catalog);
-
-        return savedCatalog;
-    }
-
-    /**
-     * Creates a catalog if needed.
-     *
-     * @param orgnr to create catalog for
-     */
-    @PreAuthorize("hasPermission('root', 'system', 'admin')")
-    @RequestMapping(value = "/admin", method = POST,
-        consumes = APPLICATION_JSON_VALUE)
-    public Catalog adminCreateCatalog(@RequestBody String orgnr) {
-        logger.info("Admin create catalog: {}.", orgnr);
-        Catalog newCatalog = new Catalog(orgnr);
-
-        Catalog savedCatalog = saveCatalog(newCatalog);
 
         return savedCatalog;
     }
@@ -234,7 +216,7 @@ public class CatalogController {
 
         String catalogHarvestEndpoint = getCatalogUri(catalog.getId());
         boolean catalogFound = false;
-/*
+
         logger.info("checking if catalog with url {} already exists as data source", catalogHarvestEndpoint);
 
         for (DcatSourceDto datasourceEntry : existingHarvesterDataSources) {
@@ -244,7 +226,7 @@ public class CatalogController {
                 catalogFound = true;
             }
         }
-*/
+
         //if current catalog does not exist as a dat source, create it
         if (!catalogFound) {
             logger.info("Harvest entry not found - create new datasource for catalog in harvester");
