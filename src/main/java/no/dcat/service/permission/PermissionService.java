@@ -20,7 +20,13 @@ public class PermissionService {
     public boolean hasPermission(String targetType, String targetId, String permission) {
         logger.debug("Checking permission: Granted role={}, checking permission={},{},{} ", getAuthentication().getAuthorities(), targetType, targetId, permission);
         return getResourceRoles().stream()
-            .anyMatch(rr -> rr.matchPermission("system", "root", "admin") || rr.matchPermission(targetType, targetId, permission));
+            .anyMatch(rr -> isSystemRootAdmin() || rr.matchPermission(targetType, targetId, permission));
+    }
+
+    public boolean isSystemRootAdmin() {
+        logger.debug("Checking system root admin permission");
+        return getResourceRoles().stream()
+            .anyMatch(rr -> rr.matchPermission("system", "root", "admin"));
     }
 
     private Authentication getAuthentication() {
