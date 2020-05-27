@@ -13,7 +13,7 @@ class ResourceRoleFactory {
             String resourceId = parts[1];
             String resourceRole = parts[2];
 
-            if(SystemRootRole.resourceType.equals(resourceType)) {
+            if (SystemRootRole.resourceType.equals(resourceType)) {
                 return new SystemRootRole();
             } else if (OrganizationResourceRole.resourceType.equals(resourceType)) {
                 return new OrganizationResourceRole(resourceId, OrganizationResourceRole.OrganizationRole.valueOf(resourceRole));

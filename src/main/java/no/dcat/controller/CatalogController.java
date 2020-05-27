@@ -64,7 +64,7 @@ public class CatalogController {
 
         Page<Catalog> catalogs;
 
-        if(permissionService.hasPermission("system", "root", "admin")) {
+        if (permissionService.isSystemRootAdmin()) {
             catalogs = catalogRepository.findAll(pageable);
         } else {
             Set<String> readableOrgNrs = permissionService.getOrganizationsForPermission(OrganizationPermission.read);
