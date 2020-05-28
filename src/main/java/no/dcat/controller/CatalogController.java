@@ -101,30 +101,6 @@ public class CatalogController {
         return savedCatalog;
     }
 
-    @RequestMapping(value = "/admin",
-        method = GET,
-        produces = APPLICATION_JSON_UTF8_VALUE)
-    public PagedResources<Resource<Catalog>> listAndUpdateCatalogs(Pageable pageable, PagedResourcesAssembler<Catalog> assembler) {
-        Page<Catalog> catalogs = catalogRepository.findAll(pageable);
-        catalogs.forEach(catalog -> {
-            if(catalog.getId().matches("\\d{9}") && !catalog.getTitle().containsKey("nb")) {
-                String organizationName = enhetService.getByOrgNr(catalog.getId()).getNavn();
-                String catalogTitle;
-
-                if (organizationName != null) {
-                    catalogTitle = "Datakatalog for " + organizationName;
-                } else {
-                    catalogTitle = "Datakatalog for " + catalog.getId();
-                }
-                catalog.getTitle().put("nb", catalogTitle);
-
-                catalogRepository.save(catalog);
-            }
-        });
-
-        return assembler.toResource(catalogRepository.findAll(pageable));
-    }
-
     private Catalog saveCatalog(Catalog catalog) {
         catalog.setPublisher(getPublisher(catalog));
 
