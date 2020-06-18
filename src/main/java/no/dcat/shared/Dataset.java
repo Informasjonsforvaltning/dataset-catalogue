@@ -5,10 +5,7 @@ import lombok.Data;
 import lombok.ToString;
 import no.dcat.common.model.Concept;
 
-import java.util.Collections;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Data
 @ToString(includeFieldNames = false)
@@ -160,6 +157,9 @@ public class Dataset {
     // Norwegian: informasjonsmodell
     private List<SkosConcept> informationModel;
 
+    // prov:qualifiedAttribution
+    // Norwegian: innholdsleverandører
+    private Set<String> qualifiedAttributions;
 
     //dct:type
     //Norwegian: type
