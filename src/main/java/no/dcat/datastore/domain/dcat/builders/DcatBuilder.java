@@ -1,33 +1,18 @@
 package no.dcat.datastore.domain.dcat.builders;
 
-import no.dcat.datastore.domain.dcat.vocabulary.ADMS;
-import no.dcat.datastore.domain.dcat.vocabulary.AT;
-import no.dcat.datastore.domain.dcat.vocabulary.DCATNO;
-import no.dcat.datastore.domain.dcat.vocabulary.DCATapi;
-import no.dcat.datastore.domain.dcat.vocabulary.DQV;
-import no.dcat.datastore.domain.dcat.vocabulary.PROV;
-import no.dcat.shared.Catalog;
-import no.dcat.shared.Contact;
-import no.dcat.shared.Dataset;
-import no.dcat.shared.Distribution;
-import no.dcat.shared.DataDistributionService;
-import no.dcat.shared.PeriodOfTime;
-import no.dcat.shared.Publisher;
-import no.dcat.shared.QualityAnnotation;
-import no.dcat.shared.Reference;
-import no.dcat.shared.SkosCode;
-import no.dcat.shared.SkosConcept;
-import no.dcat.shared.Subject;
+import no.dcat.datastore.domain.dcat.vocabulary.*;
+import no.dcat.shared.*;
 import org.apache.jena.datatypes.xsd.XSDDatatype;
 import org.apache.jena.rdf.model.*;
 import org.apache.jena.sparql.vocabulary.FOAF;
+import org.apache.jena.util.URIref;
+import org.apache.jena.vocabulary.DCAT;
 import org.apache.jena.vocabulary.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.ByteArrayOutputStream;
 import java.io.OutputStream;
-import java.io.StringWriter;
 import java.lang.reflect.Method;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -36,19 +21,15 @@ import java.util.*;
  * Created by dask on 10.04.2017.
  */
 public class DcatBuilder {
+    public static final Model mod = ModelFactory.createDefaultModel();
     private final static Logger logger = LoggerFactory.getLogger(DcatBuilder.class);
     private static final SimpleDateFormat sdfDateTime = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
     private static final SimpleDateFormat sdfDate = new SimpleDateFormat("yyyy-MM-dd");
-
-    public static final Model mod = ModelFactory.createDefaultModel();
-
     static Property schema_startDate = mod.createProperty("http://schema.org/startDate");
     static Property schema_endDate = mod.createProperty("http://schema.org/endDate");
-
+    private final Model model;
     Map<String, Contact> exportedContacsUriMap = new HashMap<>();
     Set<Contact> exportedContacts = new HashSet<>();
-
-    private final Model model;
 
     public DcatBuilder() {
         model = ModelFactory.createDefaultModel();
@@ -266,7 +247,7 @@ public class DcatBuilder {
             }
 
             String referencePropertyUri;
-            if (!isNullOrEmpty(referenceType.getCode())){
+            if (!isNullOrEmpty(referenceType.getCode())) {
                 String code = referenceType.getCode();
                 if (code.startsWith("dct:")) {
                     // TODO hack to fix error in reference-data/registration
@@ -421,7 +402,7 @@ public class DcatBuilder {
                     publisherId = publisher.getUri();
                     publisherResource = model.createResource(publisher.getUri());
                 } else {
-                    if (publisher.getId() != null && !publisher.getId().isEmpty()){
+                    if (publisher.getId() != null && !publisher.getId().isEmpty()) {
                         publisherId = publisher.getId();
                         publisherResource = model.createResource(publisher.getId());
                     } else {
@@ -507,7 +488,7 @@ public class DcatBuilder {
         if (contact != null) {
             Resource contactRes = null;
 
-            if (    (contact.getFullname() != null && !contact.getFullname().isEmpty()) ||
+            if ((contact.getFullname() != null && !contact.getFullname().isEmpty()) ||
                     (contact.getEmail() != null && !contact.getEmail().isEmpty()) ||
                     (contact.getHasTelephone() != null && !contact.getHasTelephone().isEmpty()) ||
                     (contact.getHasURL() != null && !contact.getHasURL().isEmpty()) ||
@@ -752,7 +733,7 @@ public class DcatBuilder {
     public DcatBuilder addLiteralsMultipleLabels(Resource resource, Property property, List<Map<String, String>> languageMaps) {
         if (languageMaps != null && !languageMaps.isEmpty()) {
 
-            languageMaps.forEach( languageMap -> {
+            languageMaps.forEach(languageMap -> {
                 addLiterals(resource, property, languageMap);
             });
 

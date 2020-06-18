@@ -93,7 +93,7 @@ public class DcatBuilderTest {
         JsonSerializer<Date> ser = new JsonSerializer<Date>() {
             @Override
             public JsonElement serialize(Date src, Type typeOfSrc, JsonSerializationContext
-                context) {
+                    context) {
                 return src == null ? null : new JsonPrimitive(src.getTime());
             }
         };
