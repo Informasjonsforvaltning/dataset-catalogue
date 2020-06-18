@@ -5,7 +5,7 @@ import no.dcat.datastore.domain.dcat.vocabulary.AT;
 import no.dcat.datastore.domain.dcat.vocabulary.DCATNO;
 import no.dcat.datastore.domain.dcat.vocabulary.DCATapi;
 import no.dcat.datastore.domain.dcat.vocabulary.DQV;
-import no.dcat.datastore.domain.dcat.vocabulary.OA;
+import no.dcat.datastore.domain.dcat.vocabulary.PROV;
 import no.dcat.shared.Catalog;
 import no.dcat.shared.Contact;
 import no.dcat.shared.Dataset;
@@ -61,7 +61,7 @@ public class DcatBuilder {
         model.setNsPrefix("xsd", XSD.NS);
         model.setNsPrefix("adms", ADMS.NS);
         model.setNsPrefix("iso", DQV.NS);
-        model.setNsPrefix("oa", OA.NS);
+        model.setNsPrefix("prov", PROV.NS);
         model.setNsPrefix("dqv", DQV.NS);
         model.setNsPrefix("rdf", RDF.uri);
         model.setNsPrefix("rdfs", RDFS.uri);
@@ -335,7 +335,7 @@ public class DcatBuilder {
             Resource body = model.createResource();
             addLiterals(body, RDF.value, annotation.getHasBody());
 
-            qualityAnnotation.addProperty(OA.hasBody, body);
+            qualityAnnotation.addProperty(PROV.hasBody, body);
         }
     }
 

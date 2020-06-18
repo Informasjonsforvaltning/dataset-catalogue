@@ -13,7 +13,7 @@ import no.dcat.datastore.domain.dcat.vocabulary.ADMS;
 import no.dcat.datastore.domain.dcat.vocabulary.DCAT;
 import no.dcat.datastore.domain.dcat.vocabulary.DCATNO;
 import no.dcat.datastore.domain.dcat.vocabulary.DQV;
-import no.dcat.datastore.domain.dcat.vocabulary.OA;
+import no.dcat.datastore.domain.dcat.vocabulary.PROV;
 import org.apache.jena.rdf.model.Literal;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.Property;
@@ -208,7 +208,7 @@ public class DatasetBuilder extends AbstractBuilder {
                 String expandedDimensionUri = resource.getModel().expandPrefix(actualDimensionUri);
 
                 if (dimensionUri.equals(expandedDimensionUri)) {
-                    Statement body = annotation.getProperty(OA.hasBody);
+                    Statement body = annotation.getProperty(PROV.hasBody);
 
                     Map<String, String> annotationText = extractLanguageLiteral(body.getResource(), RDF.value);
                     if (annotationText != null) {
