@@ -1,26 +1,8 @@
 package no.dcat.datastore.domain.dcat.builders;
 
-import no.dcat.datastore.domain.dcat.vocabulary.AdmEnhet;
-import no.dcat.datastore.domain.dcat.vocabulary.GeoNames;
-import no.dcat.shared.DataTheme;
-import no.dcat.shared.Dataset;
-import no.dcat.shared.Distribution;
-import no.dcat.shared.QualityAnnotation;
-import no.dcat.shared.SkosCode;
-import no.dcat.shared.Subject;
-import no.dcat.shared.Types;
-import no.dcat.datastore.domain.dcat.vocabulary.ADMS;
-import no.dcat.datastore.domain.dcat.vocabulary.DCAT;
-import no.dcat.datastore.domain.dcat.vocabulary.DCATNO;
-import no.dcat.datastore.domain.dcat.vocabulary.DQV;
-import no.dcat.datastore.domain.dcat.vocabulary.PROV;
-import org.apache.jena.rdf.model.Literal;
-import org.apache.jena.rdf.model.Model;
-import org.apache.jena.rdf.model.Property;
-import org.apache.jena.rdf.model.ResIterator;
-import org.apache.jena.rdf.model.Resource;
-import org.apache.jena.rdf.model.Statement;
-import org.apache.jena.rdf.model.StmtIterator;
+import no.dcat.datastore.domain.dcat.vocabulary.*;
+import no.dcat.shared.*;
+import org.apache.jena.rdf.model.*;
 import org.apache.jena.sparql.vocabulary.FOAF;
 import org.apache.jena.vocabulary.DCTerms;
 import org.apache.jena.vocabulary.RDF;
@@ -37,12 +19,11 @@ import java.util.Map;
 
 public class DatasetBuilder extends AbstractBuilder {
     private final static Logger logger = LoggerFactory.getLogger(DatasetBuilder.class);
-
+    static Map<String, Subject> subjects = new HashMap<>();
     protected final Model model;
     protected final Map<String, SkosCode> locations;
     protected final Map<String, Map<String, SkosCode>> codes;
     protected final Map<String, DataTheme> dataThemes;
-    static Map<String, Subject> subjects = new HashMap<>();
     List<Dataset> datasets = new ArrayList<>();
 
     public DatasetBuilder(Model model, Map<String, SkosCode> locations, Map<String, Map<String, SkosCode>> codes,
@@ -62,66 +43,6 @@ public class DatasetBuilder extends AbstractBuilder {
         this.locations = new HashMap<>();
         this.codes = new HashMap<>();
         this.dataThemes = new HashMap<>();
-    }
-
-    public List<Subject> getSubjects() {
-        if (subjects.isEmpty()) {
-            build();
-        }
-        return new ArrayList(subjects.values());
-    }
-
-    public List<Dataset> getDataset() {
-        if (datasets.isEmpty()) {
-            build();
-        }
-
-        return datasets;
-    }
-
-    public DatasetBuilder build() {
-
-        datasets.clear();
-        subjects.clear();
-
-        ResIterator catalogIterator = model.listResourcesWithProperty(RDF.type, DCAT.Catalog);
-        while (catalogIterator.hasNext()) {
-            Resource catalog = catalogIterator.next();
-
-            StmtIterator datasetIterator = catalog.listProperties(DCAT.dataset);
-            while (datasetIterator.hasNext()) {
-                Resource datasetResource = datasetIterator.next().getResource();
-
-                Dataset datasetObject = create(datasetResource, catalog, locations, codes, dataThemes);
-                datasetObject.setDistribution(getDistributions(datasetResource, DCAT.distribution));
-                datasetObject.setSample(getDistributions(datasetResource, ADMS.sample));
-
-                datasets.add(datasetObject);
-            }
-        }
-
-
-        return this;
-    }
-
-    private List<Distribution> getDistributions(Resource resource, Property property) {
-        StmtIterator distributionIterator = resource.listProperties(property);
-        List<Distribution> distributions = new ArrayList<>();
-        while (distributionIterator.hasNext()) {
-            Statement next = distributionIterator.nextStatement();
-
-
-            if (next.getObject().isResource()) {
-                Resource distribution = next.getResource();
-                distributions.add(DistributionBuilder.create(distribution, codes));
-            }
-
-        }
-        if (distributions.size() > 0) {
-            return distributions;
-        }
-
-        return null;
     }
 
     public static Dataset create(Resource resource, Resource catalog, Map<String, SkosCode> locations,
@@ -189,7 +110,6 @@ public class DatasetBuilder extends AbstractBuilder {
 
         return ds;
     }
-
 
     public static QualityAnnotation extractQualityAnnotation(Resource resource, String dimensionUri) {
         assert dimensionUri != null;
@@ -270,7 +190,6 @@ public class DatasetBuilder extends AbstractBuilder {
      * <p>looks up the uri. checks for names. Creates a location based skosCode. Works for Geonorge and Geonames.</p>
      *
      * @param locationResource the resource to extract the code from
-     *
      * @return a SkosCode with the name in prefLabel.
      */
     public static SkosCode extractLocation(Resource locationResource) {
@@ -348,6 +267,66 @@ public class DatasetBuilder extends AbstractBuilder {
 
             return subject;
         }
+        return null;
+    }
+
+    public List<Subject> getSubjects() {
+        if (subjects.isEmpty()) {
+            build();
+        }
+        return new ArrayList(subjects.values());
+    }
+
+    public List<Dataset> getDataset() {
+        if (datasets.isEmpty()) {
+            build();
+        }
+
+        return datasets;
+    }
+
+    public DatasetBuilder build() {
+
+        datasets.clear();
+        subjects.clear();
+
+        ResIterator catalogIterator = model.listResourcesWithProperty(RDF.type, DCAT.Catalog);
+        while (catalogIterator.hasNext()) {
+            Resource catalog = catalogIterator.next();
+
+            StmtIterator datasetIterator = catalog.listProperties(DCAT.dataset);
+            while (datasetIterator.hasNext()) {
+                Resource datasetResource = datasetIterator.next().getResource();
+
+                Dataset datasetObject = create(datasetResource, catalog, locations, codes, dataThemes);
+                datasetObject.setDistribution(getDistributions(datasetResource, DCAT.distribution));
+                datasetObject.setSample(getDistributions(datasetResource, ADMS.sample));
+
+                datasets.add(datasetObject);
+            }
+        }
+
+
+        return this;
+    }
+
+    private List<Distribution> getDistributions(Resource resource, Property property) {
+        StmtIterator distributionIterator = resource.listProperties(property);
+        List<Distribution> distributions = new ArrayList<>();
+        while (distributionIterator.hasNext()) {
+            Statement next = distributionIterator.nextStatement();
+
+
+            if (next.getObject().isResource()) {
+                Resource distribution = next.getResource();
+                distributions.add(DistributionBuilder.create(distribution, codes));
+            }
+
+        }
+        if (distributions.size() > 0) {
+            return distributions;
+        }
+
         return null;
     }
 }
