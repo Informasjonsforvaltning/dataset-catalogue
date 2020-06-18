@@ -17,9 +17,10 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.test.context.ActiveProfiles;
 
 import java.io.StringReader;
-import java.io.StringWriter;
 import java.lang.reflect.Type;
 import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
@@ -79,6 +80,25 @@ public class DcatBuilderTest {
 
         Model model = ModelFactory.createDefaultModel().read(new StringReader(DcatBuilder.transform(catalog, "TURTLE")), null, "TURTLE");
         Model expectedModel = RDFDataMgr.loadModel("catalog-with-dataset-with-relations.ttl");
+
+        assertTrue(model.isIsomorphicWith(expectedModel));
+    }
+
+    @Test
+    public void mustCorrectlySerialiseDatasetQualifiedAttributions() {
+        Catalog catalog = new Catalog();
+        Dataset dataset = new Dataset();
+
+        dataset.setId("http://catalog/1/dataset/1");
+        dataset.setUri("http://catalog/1/dataset/1");
+        dataset.setQualifiedAttributions(Stream.of("123456789", "987654321").collect(Collectors.toSet()));
+
+        catalog.setId("http://catalog/1");
+        catalog.setUri("http://catalog/1");
+        catalog.setDataset(Collections.singletonList(dataset));
+
+        Model model = ModelFactory.createDefaultModel().read(new StringReader(DcatBuilder.transform(catalog, "TURTLE")), null, "TURTLE");
+        Model expectedModel = RDFDataMgr.loadModel("catalog-with-dataset-with-qualified-attributions.ttl");
 
         assertTrue(model.isIsomorphicWith(expectedModel));
     }

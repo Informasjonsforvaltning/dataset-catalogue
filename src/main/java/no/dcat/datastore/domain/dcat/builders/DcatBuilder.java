@@ -17,6 +17,8 @@ import java.lang.reflect.Method;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
+import static java.lang.String.format;
+
 /**
  * Created by dask on 10.04.2017.
  */
@@ -150,6 +152,7 @@ public class DcatBuilder {
 
                         addReferences(datRes, dataset.getReferences());
                         addRelations(datRes, dataset.getRelations());
+                        addQualifiedAttributions(datRes, dataset.getQualifiedAttributions());
                         addProperty(datRes, DCTerms.provenance, dataset.getProvenance());
                         addStringLiterals(datRes, DCTerms.identifier, dataset.getIdentifier());
 
@@ -228,6 +231,14 @@ public class DcatBuilder {
         }
     }
 
+    private void addQualifiedAttributions(Resource resource, Set<String> qualifiedAttributions) {
+        if (qualifiedAttributions != null) {
+            qualifiedAttributions.stream()
+                    .filter(Objects::nonNull)
+                    .forEach(attribution -> addQualifiedAttribution(resource, attribution));
+        }
+    }
+
     private void addReference(Resource datRes, Reference reference) {
         if (reference != null) {
 
@@ -297,6 +308,21 @@ public class DcatBuilder {
 
             resource.addProperty(DCTerms.relation, relationResource);
         }
+    }
+
+    private void addQualifiedAttribution(Resource resource, String qualifiedAttribution) {
+        Resource qualifiedAttributionResource = model.createResource()
+                .addProperty(RDF.type, PROV.Attribution)
+                .addProperty(
+                        PROV.agent,
+                        ResourceFactory.createResource(URIref.encode(format("https://data.brreg.no/enhetsregisteret/api/enheter/%s", qualifiedAttribution)))
+                )
+                .addProperty(
+                        DCAT.hadRole,
+                        ResourceFactory.createResource(URIref.encode("http://registry.it.csiro.au/def/isotc211/CI_RoleCode/contributor"))
+                );
+        resource.addProperty(PROV.qualifiedAttribution, qualifiedAttributionResource);
+
     }
 
     private void addQualityAnnotation(Resource datRes, Property hasQualityAnnotation, QualityAnnotation annotation) {
