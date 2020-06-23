@@ -166,7 +166,8 @@ public class DatasetService {
     }
 
     private void triggerHarvest(Dataset dataset) {
-        logger.info("Dataset status is {}, so a harvest message should be sent for dataset with ID {} in catalog with ID {}", dataset.getRegistrationStatus(), dataset.getId(), dataset.getCatalogId());
-        datasetPublisherService.sendHarvestMessage(dataset);
+        // TODO: reactivate rabbit messages with better handling of published datasets
+        /*logger.info("Dataset status is {}, so a harvest message should be sent for dataset with ID {} in catalog with ID {}", dataset.getRegistrationStatus(), dataset.getId(), dataset.getCatalogId());
+        datasetPublisherService.sendHarvestMessage(dataset);*/
     }
 }
