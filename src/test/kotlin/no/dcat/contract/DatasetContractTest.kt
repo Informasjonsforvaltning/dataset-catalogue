@@ -8,10 +8,12 @@ import no.dcat.utils.jwk.JwtToken
 import no.dcat.utils.turtleApiAuthorizedRequest
 import org.junit.jupiter.api.*
 import org.springframework.http.HttpStatus
+import kotlin.test.Ignore
 import kotlin.test.assertEquals
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @Tag("contract")
+@Ignore
 class DatasetContractTest : ApiTestContainer() {
 
     val orgNo = "910244132"

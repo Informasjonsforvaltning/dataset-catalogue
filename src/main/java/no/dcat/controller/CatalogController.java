@@ -59,22 +59,8 @@ public class CatalogController {
         method = GET,
         produces = APPLICATION_JSON_UTF8_VALUE)
     public PagedResources<Resource<Catalog>> listCatalogs(Pageable pageable, PagedResourcesAssembler<Catalog> assembler) {
-        Set<String> adminableOrgNrs = permissionService.getOrganizationsForPermission(OrganizationPermission.admin);
-        createCatalogsIfNeeded(adminableOrgNrs);
 
-        Page<Catalog> catalogs;
-
-        if (permissionService.isSystemRootAdmin()) {
-            catalogs = catalogRepository.findAll(pageable);
-        } else {
-            Set<String> readableOrgNrs = permissionService.getOrganizationsForPermission(OrganizationPermission.read);
-
-            if (readableOrgNrs.size() == 0) {
-                return assembler.toResource(new PageImpl<>(new ArrayList<>(), pageable, 0));
-            }
-
-            catalogs = catalogRepository.findByIdIn(new ArrayList<>(readableOrgNrs), pageable);
-        }
+        Page<Catalog> catalogs = catalogRepository.findAll(pageable);
         return assembler.toResource(catalogs);
     }
 

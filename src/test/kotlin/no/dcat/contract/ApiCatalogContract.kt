@@ -13,9 +13,11 @@ import org.junit.jupiter.api.Tag
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
 import org.springframework.http.HttpStatus
+import kotlin.test.Ignore
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @Tag("contract")
+@Ignore
 class CatalogContract : ApiTestContainer() {
 
     @Test

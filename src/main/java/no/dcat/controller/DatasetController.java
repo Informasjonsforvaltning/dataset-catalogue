@@ -19,7 +19,6 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_UTF8_VALUE;
 public class DatasetController {
     private final DatasetService datasetService;
 
-    @PreAuthorize("hasPermission(#catalogId, 'organization', 'read')")
     @GetMapping(produces = APPLICATION_JSON_UTF8_VALUE)
     public PagedResources<Resource<Dataset>> listDatasets(@PathVariable("catalogId") String catalogId, Pageable pageable, PagedResourcesAssembler<Dataset> assembler) {
         return assembler.toResource(datasetService.listDatasets(catalogId, pageable));
